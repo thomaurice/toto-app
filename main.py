@@ -8,7 +8,9 @@ from pydantic import BaseModel
 import jwt
 
 from constants import BOOKS_FOLDER
-from database import init_database, user_exists, create_user, verify_user
+from database import init_database, create_user, verify_user
+import database
+from domain_models import Book, User
 
 load_env = partial(load_dotenv, verbose=True)
 
@@ -31,7 +33,7 @@ def _create_access_token(username: str) -> str:
     return jwt.encode(payload, os.environ.get("JWT_SECRET_KEY"), algorithm="HS256")
 
 
-def _get_current_user(request: Request) -> str:
+def _get_current_user(request: Request) -> User:
     if not (auth_header := request.headers.get("Authorization")):
         raise HTTPException(status_code=401, detail="No token provided")
 
@@ -48,8 +50,9 @@ def _get_current_user(request: Request) -> str:
                 algorithms=["HS256"],
             ),
         )
-        user = decoded.get("user")
-        if not user_exists(user):
+        username = decoded.get("user")
+        user = database.get_user_by_username(username)
+        if not user:
             raise HTTPException(status_code=403, detail="Invalid user")
         return user
     except jwt.InvalidTokenError:
@@ -57,13 +60,16 @@ def _get_current_user(request: Request) -> str:
 
 
 @app.get("/books")
-def get_books() -> Sequence[str]:
-    return [f.name for f in BOOKS_FOLDER.iterdir() if f.is_file()]
+def get_books() -> Sequence[Book]:
+    return database.get_books()
 
 
-@app.get("/books/{book_name:str}")
-def get_book(book_name: str) -> Path:
-    book_path = BOOKS_FOLDER / book_name
+@app.get("/books/{book_id:int}/content")
+def get_book(book_id: int) -> Path:
+    book = database.get_book(book_id)
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    book_path = BOOKS_FOLDER / f"{book.title}.txt"
     if not book_path.exists() or not book_path.is_file():
         raise HTTPException(status_code=404, detail="Book not found")
     with open(book_path, "r") as f:
@@ -71,8 +77,37 @@ def get_book(book_name: str) -> Path:
 
 
 @app.get("/")
-async def read_root(current_user: Annotated[str, Depends(_get_current_user)]):
-    return {"Hello": current_user}
+async def read_root(current_user: Annotated[User, Depends(_get_current_user)]):
+    return {"Hello": current_user.username}
+
+
+class CommentCreate(BaseModel):
+    content: str
+    start_position: int
+    end_position: int
+
+
+@app.post("/books/{book_id:int}/comments")
+async def create_comment(
+    book_id: int,
+    comment_data: CommentCreate,
+    current_user: Annotated[User, Depends(_get_current_user)],
+):
+    database.add_comment(
+        book_id=book_id,
+        user_id=current_user.id,
+        content=comment_data.content,
+        start_position=comment_data.start_position,
+        end_position=comment_data.end_position,
+    )
+    return {"message": "Comment added successfully"}
+
+
+@app.get("/books/{book_id:int}/comments")
+async def get_book_comments(
+    book_id: int,
+):
+    return database.get_book_comments(book_id)
 
 
 @app.post("/register")
