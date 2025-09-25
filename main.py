@@ -1,6 +1,7 @@
 from functools import partial
 import os
-from typing import Annotated, cast
+from pathlib import Path
+from typing import Annotated, Sequence, cast
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, Request
 import jwt
@@ -10,6 +11,8 @@ load_env = partial(load_dotenv, verbose=True)
 
 app = FastAPI(on_startup=[load_env])
 USERS = {"TOTO"}
+DATA_FOLDER = Path("./local-data")
+BOOKS_FOLDER = DATA_FOLDER / "books"
 
 
 def get_current_user(request: Request) -> str:
@@ -37,9 +40,18 @@ def get_current_user(request: Request) -> str:
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
-@app.get("/me")
-async def read_me(current_user: Annotated[str, Depends(get_current_user)]):
-    return current_user
+@app.get("/books")
+def get_books() -> Sequence[str]:
+    return [f.name for f in BOOKS_FOLDER.iterdir() if f.is_file()]
+
+
+@app.get("/books/{book_name:str}")
+def get_book(book_name: str) -> Path:
+    book_path = BOOKS_FOLDER / book_name
+    if not book_path.exists() or not book_path.is_file():
+        raise HTTPException(status_code=404, detail="Book not found")
+    with open(book_path, "r") as f:
+        return f.read()
 
 
 @app.get("/")
