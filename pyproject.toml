@@ -10,4 +10,5 @@ dependencies = [
     "pyjwt>=2.8.0",
     "python-dotenv>=1.0.0",
     "ruff>=0.13.1",
+    "structlog>=25.4.0",
 ]

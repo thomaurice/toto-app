@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, Request
 import jwt
 
+from constants import BOOKS_FOLDER
+from database import init_database, user_exists
+
 load_env = partial(load_dotenv, verbose=True)
 
 
-app = FastAPI(on_startup=[load_env])
-USERS = {"TOTO"}
-DATA_FOLDER = Path("./local-data")
-BOOKS_FOLDER = DATA_FOLDER / "books"
+app = FastAPI(on_startup=[load_env, init_database])
 
 
 def get_current_user(request: Request) -> str:
@@ -33,7 +33,7 @@ def get_current_user(request: Request) -> str:
             ),
         )
         user = decoded.get("user")
-        if user not in USERS:
+        if not user_exists(user):
             raise HTTPException(status_code=403, detail="Invalid user")
         return user
     except jwt.InvalidTokenError:
