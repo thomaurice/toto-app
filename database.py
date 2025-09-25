@@ -31,7 +31,7 @@ def init_database():
 
     # Create all tables
     logger.info("Initializing database at", db_path=DB_PATH)
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine, checkfirst=True)
 
 
 def user_exists(username: str) -> bool:
