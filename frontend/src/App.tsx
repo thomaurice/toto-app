@@ -1,32 +1,25 @@
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
-import { DefaultApiFactory } from "./api";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navigation from "./components/Navigation";
+import Home from "./pages/Home";
+import About from "./pages/About";
+
 const queryClient = new QueryClient();
-
-const BookList = () => {
-  const api = DefaultApiFactory({
-    basePath: "http://localhost:8000",
-    isJsonMime: (mime: string) => mime === "application/json",
-  });
-
-  // Queries
-  const query = useQuery({ queryKey: ["books"], queryFn: api.getBooks });
-  return (
-    <ul>
-      {query.data?.data.map((book) => (
-        <li key={book.id}>{book.title}</li>
-      ))}
-    </ul>
-  );
-};
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BookList />
+      <Router>
+        <div>
+          <Navigation />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
     </QueryClientProvider>
   );
 }
