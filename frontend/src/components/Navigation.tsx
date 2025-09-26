@@ -2,6 +2,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { Link } from "react-router-dom";
 import { useApi } from "../api/useApi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "../design-system/Button";
 
 export default function Navigation() {
   const [token, setToken] = useLocalStorage("token", "");
@@ -23,7 +24,7 @@ export default function Navigation() {
       {currentUser && (
         <div>
           <span>Logged in as: {currentUser.username}</span>
-          <button onClick={handleLogout}>Logout</button>
+          <Button onClick={handleLogout}>Logout</Button>
         </div>
       )}
 

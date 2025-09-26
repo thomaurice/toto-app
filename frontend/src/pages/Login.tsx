@@ -5,6 +5,8 @@ import type { UserLogin } from "../api";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useApi } from "../api/useApi";
 import { useNavigate } from "react-router-dom";
+import { Input } from "@headlessui/react";
+import { Button } from "../design-system/Button";
 
 export default function Login() {
   const [formData, setFormData] = useState<UserLogin>({
@@ -47,7 +49,7 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="username">Username:</label>
-            <input
+            <Input
               type="text"
               id="username"
               name="username"
@@ -58,7 +60,7 @@ export default function Login() {
           </div>
           <div>
             <label htmlFor="password">Password:</label>
-            <input
+            <Input
               type="password"
               id="password"
               name="password"
@@ -68,9 +70,9 @@ export default function Login() {
             />
           </div>
           {errorMessage && <p>{errorMessage}</p>}
-          <button type="submit" disabled={loginMutation.isPending}>
+          <Button type="submit" disabled={loginMutation.isPending}>
             {loginMutation.isPending ? "Logging in..." : "Login"}
-          </button>
+          </Button>
         </form>
       </div>
     </>
