@@ -30,7 +30,7 @@ export default function Navigation() {
       <nav>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
-        <Link to="/login">Login</Link>
+        {!currentUser && <Link to="/login">Login</Link>}
       </nav>
     </div>
   );
