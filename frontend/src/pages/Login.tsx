@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import type { UserLogin } from "../api";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useApi } from "../api/useApi";
 import { useNavigate } from "react-router-dom";
-import { Input } from "@headlessui/react";
+import { Field, Fieldset, Input, Label } from "@headlessui/react";
 import { Button } from "../design-system/Button";
 
 export default function Login() {
@@ -28,53 +28,59 @@ export default function Login() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    loginMutation.mutate(formData);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const changeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      username: e.target.value,
     }));
   };
+
+  const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      password: e.target.value,
+    }));
+  };
+  const handleSubmit = useCallback(() => {
+    loginMutation.mutate(formData);
+  }, [formData, loginMutation]);
 
   return (
     <>
       <title>Login</title>
-      <div>
-        <h1>Login</h1>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="username">Username:</label>
-            <Input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password:</label>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          {errorMessage && <p>{errorMessage}</p>}
-          <Button type="submit" disabled={loginMutation.isPending}>
-            {loginMutation.isPending ? "Logging in..." : "Login"}
-          </Button>
-        </form>
-      </div>
+
+      <h1>Login</h1>
+
+      <Fieldset>
+        <Field>
+          <Label>Username:</Label>
+          <Input
+            type="text"
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={changeUsername}
+            required
+          />
+        </Field>
+
+        <Field>
+          <Label>Password:</Label>
+          <Input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={changePassword}
+            required
+          />
+        </Field>
+      </Fieldset>
+
+      {errorMessage && <p>{errorMessage}</p>}
+      <Button onClick={handleSubmit} disabled={loginMutation.isPending}>
+        {loginMutation.isPending ? "Logging in..." : "Login"}
+      </Button>
     </>
   );
 }
