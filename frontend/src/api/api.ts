@@ -510,7 +510,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registerUser(userCreate: UserCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+        async registerUser(userCreate: UserCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registerUser(userCreate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.registerUser']?.[localVarOperationServerIndex]?.url;
@@ -592,7 +592,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registerUser(userCreate: UserCreate, options?: RawAxiosRequestConfig): AxiosPromise<any> {
+        registerUser(userCreate: UserCreate, options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.registerUser(userCreate, options).then((request) => request(axios, basePath));
         },
     };
@@ -671,7 +671,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    registerUser(userCreate: UserCreate, options?: RawAxiosRequestConfig): AxiosPromise<any>;
+    registerUser(userCreate: UserCreate, options?: RawAxiosRequestConfig): AxiosPromise<string>;
 
 }
 

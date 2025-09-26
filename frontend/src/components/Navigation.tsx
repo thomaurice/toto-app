@@ -31,6 +31,7 @@ export default function Navigation() {
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
         {!currentUser && <Link to="/login">Login</Link>}
+        {!currentUser && <Link to="/register">Register</Link>}
       </nav>
     </div>
   );

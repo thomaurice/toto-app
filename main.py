@@ -121,11 +121,11 @@ async def get_book_comments(
 
 
 @app.post("/register", operation_id="register_user")
-async def register_user(user_data: UserCreate):
+async def register_user(user_data: UserCreate) -> str:
     """Register a new user with username and password."""
     try:
         create_user(user_data.username, user_data.password)
-        return {"message": "User created successfully"}
+        return _create_access_token(user_data.username)
     except UserAlreadyExists as e:
         raise HTTPException(status_code=409, detail="Username already exists") from e
 

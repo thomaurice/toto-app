@@ -309,7 +309,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **registerUser**
-> any registerUser(userCreate)
+> string registerUser(userCreate)
 
 Register a new user with username and password.
 
@@ -341,7 +341,7 @@ const { status, data } = await apiInstance.registerUser(
 
 ### Return type
 
-**any**
+**string**
 
 ### Authorization
 
