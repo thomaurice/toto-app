@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Annotated, Sequence, cast
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import jwt
 
@@ -30,6 +31,15 @@ app = FastAPI(
     description="API for managing books and user comments",
     version="0.1.0",
     on_startup=[load_env, init_database],
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
