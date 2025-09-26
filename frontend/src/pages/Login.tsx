@@ -11,6 +11,7 @@ export default function Login() {
     username: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [, setPersistedToken] = useLocalStorage("token", "");
   const api = useApi();
   const navigate = useNavigate();
@@ -20,8 +21,8 @@ export default function Login() {
       setPersistedToken(response.data);
       navigate("/");
     },
-    onError: (error) => {
-      console.error("Login failed:", error);
+    onError: () => {
+      setErrorMessage("Invalid username or password");
     },
   });
 
@@ -66,6 +67,7 @@ export default function Login() {
               required
             />
           </div>
+          {errorMessage && <p>{errorMessage}</p>}
           <button type="submit" disabled={loginMutation.isPending}>
             {loginMutation.isPending ? "Logging in..." : "Login"}
           </button>
