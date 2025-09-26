@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { DefaultApiFactory } from "../api";
 import type { UserLogin } from "../api";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 const api = DefaultApiFactory(
   {
@@ -15,16 +16,15 @@ export default function Login() {
     username: "",
     password: "",
   });
+  const [, setPersistedToken] = useLocalStorage("token", "");
 
   const loginMutation = useMutation({
     mutationFn: (loginData: UserLogin) => api.loginUser(loginData),
     onSuccess: (response) => {
-      localStorage.setItem("token", response.data);
-      alert("Login successful!");
+      setPersistedToken(response.data);
     },
     onError: (error) => {
       console.error("Login failed:", error);
-      alert("Login failed. Please check your credentials.");
     },
   });
 
