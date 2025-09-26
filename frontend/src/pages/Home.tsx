@@ -1,14 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { DefaultApiFactory } from "../api";
-
-const api = DefaultApiFactory(
-  {
-    isJsonMime: (mime: string) => mime === "application/json",
-  },
-  "http://localhost:8000"
-);
+import { useApi } from "../api/useApi";
 
 const BookList = () => {
+  const api = useApi();
   const query = useQuery({ queryKey: ["books"], queryFn: api.getBooks });
   return (
     <ul>

@@ -9,6 +9,7 @@ docs/Book.md
 docs/CommentCreate.md
 docs/DefaultApi.md
 docs/HTTPValidationError.md
+docs/User.md
 docs/UserCreate.md
 docs/UserLogin.md
 docs/ValidationError.md

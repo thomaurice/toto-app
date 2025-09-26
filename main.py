@@ -138,3 +138,10 @@ async def login_user(user_credentials: UserLogin) -> str:
         return access_token
     else:
         raise HTTPException(status_code=401, detail="Invalid username or password")
+
+
+@app.get("/me", operation_id="get_current_user")
+async def get_current_user(
+    current_user: Annotated[User, Depends(_get_current_user)],
+) -> User:
+    return current_user

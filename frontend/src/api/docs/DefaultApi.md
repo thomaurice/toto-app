@@ -8,6 +8,7 @@ All URIs are relative to *http://localhost*
 |[**getBook**](#getbook) | **GET** /books/{book_id}/content | Get Book|
 |[**getBookComments**](#getbookcomments) | **GET** /books/{book_id}/comments | Get Book Comments|
 |[**getBooks**](#getbooks) | **GET** /books | Get Books|
+|[**getCurrentUser**](#getcurrentuser) | **GET** /me | Get Current User|
 |[**loginUser**](#loginuser) | **POST** /login | Login User|
 |[**registerUser**](#registeruser) | **POST** /register | Register User|
 
@@ -193,6 +194,49 @@ This endpoint does not have any parameters.
 ### Return type
 
 **Array<Book>**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successful Response |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getCurrentUser**
+> User getCurrentUser()
+
+
+### Example
+
+```typescript
+import {
+    DefaultApi,
+    Configuration
+} from 'toto-app-api-client';
+
+const configuration = new Configuration();
+const apiInstance = new DefaultApi(configuration);
+
+const { status, data } = await apiInstance.getCurrentUser();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**User**
 
 ### Authorization
 

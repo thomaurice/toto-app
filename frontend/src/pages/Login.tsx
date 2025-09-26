@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { DefaultApiFactory } from "../api";
+
 import type { UserLogin } from "../api";
 import { useLocalStorage } from "@uidotdev/usehooks";
-
-const api = DefaultApiFactory(
-  {
-    isJsonMime: (mime: string) => mime === "application/json",
-  },
-  "http://localhost:8000"
-);
+import { useApi } from "../api/useApi";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [formData, setFormData] = useState<UserLogin>({
@@ -17,11 +12,13 @@ export default function Login() {
     password: "",
   });
   const [, setPersistedToken] = useLocalStorage("token", "");
-
+  const api = useApi();
+  const navigate = useNavigate();
   const loginMutation = useMutation({
     mutationFn: (loginData: UserLogin) => api.loginUser(loginData),
     onSuccess: (response) => {
       setPersistedToken(response.data);
+      navigate("/");
     },
     onError: (error) => {
       console.error("Login failed:", error);
