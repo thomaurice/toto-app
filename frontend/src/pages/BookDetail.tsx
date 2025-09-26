@@ -47,14 +47,17 @@ export default function BookDetail() {
   }
 
   return (
-    <div>
+    <>
+      <title>{currentBook.title}</title>
       <div>
-        <Link to="/">← Back to Books</Link>
+        <div>
+          <Link to="/">← Back to Books</Link>
+        </div>
+        <h1>{currentBook.title}</h1>
+        <div className="whitespace-pre-wrap">
+          {bookContentQuery.data?.data || "No content available"}
+        </div>
       </div>
-      <h1>{currentBook.title}</h1>
-      <div className="whitespace-pre-wrap">
-        {bookContentQuery.data?.data || "No content available"}
-      </div>
-    </div>
+    </>
   );
 }

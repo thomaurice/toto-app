@@ -5,6 +5,7 @@ import type { UserCreate } from "../api";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useApi } from "../api/useApi";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../design-system/Button";
 
 export default function Register() {
   const [formData, setFormData] = useState<UserCreate>({
@@ -66,14 +67,12 @@ export default function Register() {
               required
             />
           </div>
-          <button type="submit" disabled={registerMutation.isPending}>
+          <Button type="submit" disabled={registerMutation.isPending}>
             {registerMutation.isPending ? "Creating account..." : "Register"}
-          </button>
+          </Button>
         </form>
         {registerMutation.isError && (
-          <div style={{ color: "red", marginTop: "10px" }}>
-            Registration failed. Please try again.
-          </div>
+          <div>Registration failed. Please try again.</div>
         )}
       </div>
     </>
