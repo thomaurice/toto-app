@@ -52,8 +52,9 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**createComment**](docs/DefaultApi.md#createcomment) | **POST** /books/{book_id}/comments | Create Comment
-*DefaultApi* | [**getBook**](docs/DefaultApi.md#getbook) | **GET** /books/{book_id}/content | Get Book
+*DefaultApi* | [**getBook**](docs/DefaultApi.md#getbook) | **GET** /books/{book_id} | Get Book
 *DefaultApi* | [**getBookComments**](docs/DefaultApi.md#getbookcomments) | **GET** /books/{book_id}/comments | Get Book Comments
+*DefaultApi* | [**getBookContent**](docs/DefaultApi.md#getbookcontent) | **GET** /books/{book_id}/content | Get Book Content
 *DefaultApi* | [**getBooks**](docs/DefaultApi.md#getbooks) | **GET** /books | Get Books
 *DefaultApi* | [**getCurrentUser**](docs/DefaultApi.md#getcurrentuser) | **GET** /me | Get Current User
 *DefaultApi* | [**loginUser**](docs/DefaultApi.md#loginuser) | **POST** /login | Login User

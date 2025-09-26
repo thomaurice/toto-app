@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useApi } from "../api/useApi";
+import { Link } from "react-router-dom";
 
 const BookList = () => {
   const api = useApi();
@@ -7,7 +8,9 @@ const BookList = () => {
   return (
     <ul>
       {query.data?.data.map((book) => (
-        <li key={book.id}>{book.title}</li>
+        <li key={book.id}>
+          - <Link to={`/books/${book.id}`}>{book.title}</Link>
+        </li>
       ))}
     </ul>
   );

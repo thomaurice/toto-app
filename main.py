@@ -79,8 +79,13 @@ def get_books() -> Sequence[Book]:
     return database.get_books()
 
 
-@app.get("/books/{book_id:int}/content", operation_id="get_book")
-def get_book(book_id: int) -> Path:
+@app.get("/books/{book_id:int}", operation_id="get_book")
+def get_book(book_id: int) -> Book:
+    return database.get_book(book_id)
+
+
+@app.get("/books/{book_id:int}/content", operation_id="get_book_content")
+def get_book_content(book_id: int) -> Path:
     book = database.get_book(book_id)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")

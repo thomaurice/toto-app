@@ -226,7 +226,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         getBook: async (bookId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'bookId' is not null or undefined
             assertParamExists('getBook', 'bookId', bookId)
-            const localVarPath = `/books/{book_id}/content`
+            const localVarPath = `/books/{book_id}`
                 .replace(`{${"book_id"}}`, encodeURIComponent(String(bookId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -261,6 +261,40 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'bookId' is not null or undefined
             assertParamExists('getBookComments', 'bookId', bookId)
             const localVarPath = `/books/{book_id}/comments`
+                .replace(`{${"book_id"}}`, encodeURIComponent(String(bookId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get Book Content
+         * @param {number} bookId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBookContent: async (bookId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'bookId' is not null or undefined
+            assertParamExists('getBookContent', 'bookId', bookId)
+            const localVarPath = `/books/{book_id}/content`
                 .replace(`{${"book_id"}}`, encodeURIComponent(String(bookId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -447,7 +481,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBook(bookId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async getBook(bookId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Book>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBook(bookId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getBook']?.[localVarOperationServerIndex]?.url;
@@ -464,6 +498,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBookComments(bookId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getBookComments']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get Book Content
+         * @param {number} bookId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBookContent(bookId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBookContent(bookId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getBookContent']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -544,7 +591,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBook(bookId: number, options?: RawAxiosRequestConfig): AxiosPromise<string> {
+        getBook(bookId: number, options?: RawAxiosRequestConfig): AxiosPromise<Book> {
             return localVarFp.getBook(bookId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -556,6 +603,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         getBookComments(bookId: number, options?: RawAxiosRequestConfig): AxiosPromise<any> {
             return localVarFp.getBookComments(bookId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get Book Content
+         * @param {number} bookId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBookContent(bookId: number, options?: RawAxiosRequestConfig): AxiosPromise<string> {
+            return localVarFp.getBookContent(bookId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -623,7 +680,7 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    getBook(bookId: number, options?: RawAxiosRequestConfig): AxiosPromise<string>;
+    getBook(bookId: number, options?: RawAxiosRequestConfig): AxiosPromise<Book>;
 
     /**
      * 
@@ -634,6 +691,16 @@ export interface DefaultApiInterface {
      * @memberof DefaultApiInterface
      */
     getBookComments(bookId: number, options?: RawAxiosRequestConfig): AxiosPromise<any>;
+
+    /**
+     * 
+     * @summary Get Book Content
+     * @param {number} bookId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    getBookContent(bookId: number, options?: RawAxiosRequestConfig): AxiosPromise<string>;
 
     /**
      * 
@@ -717,6 +784,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      */
     public getBookComments(bookId: number, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).getBookComments(bookId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get Book Content
+     * @param {number} bookId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getBookContent(bookId: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getBookContent(bookId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

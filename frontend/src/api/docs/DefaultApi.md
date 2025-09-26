@@ -5,8 +5,9 @@ All URIs are relative to *http://localhost*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**createComment**](#createcomment) | **POST** /books/{book_id}/comments | Create Comment|
-|[**getBook**](#getbook) | **GET** /books/{book_id}/content | Get Book|
+|[**getBook**](#getbook) | **GET** /books/{book_id} | Get Book|
 |[**getBookComments**](#getbookcomments) | **GET** /books/{book_id}/comments | Get Book Comments|
+|[**getBookContent**](#getbookcontent) | **GET** /books/{book_id}/content | Get Book Content|
 |[**getBooks**](#getbooks) | **GET** /books | Get Books|
 |[**getCurrentUser**](#getcurrentuser) | **GET** /me | Get Current User|
 |[**loginUser**](#loginuser) | **POST** /login | Login User|
@@ -68,7 +69,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getBook**
-> string getBook()
+> Book getBook()
 
 
 ### Example
@@ -98,7 +99,7 @@ const { status, data } = await apiInstance.getBook(
 
 ### Return type
 
-**string**
+**Book**
 
 ### Authorization
 
@@ -150,6 +151,57 @@ const { status, data } = await apiInstance.getBookComments(
 ### Return type
 
 **any**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successful Response |  -  |
+|**422** | Validation Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getBookContent**
+> string getBookContent()
+
+
+### Example
+
+```typescript
+import {
+    DefaultApi,
+    Configuration
+} from 'toto-app-api-client';
+
+const configuration = new Configuration();
+const apiInstance = new DefaultApi(configuration);
+
+let bookId: number; // (default to undefined)
+
+const { status, data } = await apiInstance.getBookContent(
+    bookId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **bookId** | [**number**] |  | defaults to undefined|
+
+
+### Return type
+
+**string**
 
 ### Authorization
 

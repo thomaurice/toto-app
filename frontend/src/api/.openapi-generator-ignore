@@ -4,6 +4,13 @@
 # Use this file to prevent files from being overwritten by the generator.
 # The patterns follow closely to .gitignore or .dockerignore.
 
+# Ignore specific files that we don't want generated
+.npmignore
+git_push.sh
+tsconfig.json
+package.json
+tsconfig.esm.json
+
 # As an example, the C# client generator defines ApiClient.cs.
 # You can make changes and tell OpenAPI Generator to ignore just this file by uncommenting the following line:
 #ApiClient.cs

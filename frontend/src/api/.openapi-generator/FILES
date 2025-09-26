@@ -1,5 +1,4 @@
 .gitignore
-.npmignore
 README.md
 api.ts
 base.ts
@@ -14,8 +13,4 @@ docs/UserCreate.md
 docs/UserLogin.md
 docs/ValidationError.md
 docs/ValidationErrorLocInner.md
-git_push.sh
 index.ts
-package.json
-tsconfig.esm.json
-tsconfig.json
