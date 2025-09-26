@@ -1,0 +1,11 @@
+{
+  "npmName": "toto-app-api-client",
+  "npmVersion": "1.0.0",
+  "supportsES6": true,
+  "withInterfaces": true,
+  "apiPackage": "api",
+  "modelPackage": "models",
+  "stringEnums": true,
+  "enumNameSuffix": "",
+  "removeEnumValuePrefix": false
+}

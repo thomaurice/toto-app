@@ -25,7 +25,12 @@ class UserLogin(BaseModel):
     password: str
 
 
-app = FastAPI(on_startup=[load_env, init_database])
+app = FastAPI(
+    title="Toto App API",
+    description="API for managing books and user comments",
+    version="0.1.0",
+    on_startup=[load_env, init_database],
+)
 
 
 def _create_access_token(username: str) -> str:
@@ -59,12 +64,12 @@ def _get_current_user(request: Request) -> User:
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
-@app.get("/books")
+@app.get("/books", operation_id="get_books")
 def get_books() -> Sequence[Book]:
     return database.get_books()
 
 
-@app.get("/books/{book_id:int}/content")
+@app.get("/books/{book_id:int}/content", operation_id="get_book")
 def get_book(book_id: int) -> Path:
     book = database.get_book(book_id)
     if not book:
@@ -76,18 +81,13 @@ def get_book(book_id: int) -> Path:
         return f.read()
 
 
-@app.get("/")
-async def read_root(current_user: Annotated[User, Depends(_get_current_user)]):
-    return {"Hello": current_user.username}
-
-
 class CommentCreate(BaseModel):
     content: str
     start_position: int
     end_position: int
 
 
-@app.post("/books/{book_id:int}/comments")
+@app.post("/books/{book_id:int}/comments", operation_id="create_comment")
 async def create_comment(
     book_id: int,
     comment_data: CommentCreate,
@@ -103,14 +103,14 @@ async def create_comment(
     return {"message": "Comment added successfully"}
 
 
-@app.get("/books/{book_id:int}/comments")
+@app.get("/books/{book_id:int}/comments", operation_id="get_book_comments")
 async def get_book_comments(
     book_id: int,
 ):
     return database.get_book_comments(book_id)
 
 
-@app.post("/register")
+@app.post("/register", operation_id="register_user")
 async def register_user(user_data: UserCreate):
     """Register a new user with username and password."""
     try:
@@ -120,7 +120,7 @@ async def register_user(user_data: UserCreate):
         raise HTTPException(status_code=409, detail="Username already exists") from e
 
 
-@app.post("/login")
+@app.post("/login", operation_id="login_user")
 async def login_user(user_credentials: UserLogin) -> str:
     """Authenticate user and return JWT token."""
     if verify_user(user_credentials.username, user_credentials.password):
