@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 
 
@@ -18,3 +19,4 @@ class Comment(BaseModel):
     content: str
     start_position: int
     end_position: int
+    created_at: datetime

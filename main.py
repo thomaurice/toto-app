@@ -8,7 +8,7 @@ from pydantic import BaseModel
 import jwt
 
 from constants import BOOKS_FOLDER
-from database import init_database, create_user, verify_user
+from database import UserAlreadyExists, init_database, create_user, verify_user
 import database
 from domain_models import Book, User
 
@@ -116,8 +116,8 @@ async def register_user(user_data: UserCreate):
     try:
         create_user(user_data.username, user_data.password)
         return {"message": "User created successfully"}
-    except ValueError:
-        raise HTTPException(status_code=409, detail="Username already exists")
+    except UserAlreadyExists as e:
+        raise HTTPException(status_code=409, detail="Username already exists") from e
 
 
 @app.post("/login")

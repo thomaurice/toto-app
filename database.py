@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+from functools import partial
 from typing import Sequence
 import bcrypt
 from sqlalchemy import create_engine, delete, insert
@@ -15,12 +17,18 @@ class Base(DeclarativeBase):
     pass
 
 
+_now = partial(datetime.now, tz=timezone.utc)
+
+
 class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(unique=True)
     password_hash: Mapped[str] = mapped_column()
+    created_at: Mapped[datetime] = mapped_column(
+        server_default="CURRENT_TIMESTAMP", default=_now
+    )
 
 
 class Book(Base):
@@ -39,21 +47,22 @@ class Comment(Base):
     content: Mapped[str] = mapped_column()
     start_position: Mapped[int] = mapped_column()
     end_position: Mapped[int] = mapped_column()
+    created_at: Mapped[datetime] = mapped_column(
+        server_default="CURRENT_TIMESTAMP", default=_now
+    )
 
 
-# Create the SQLAlchemy engine
 engine = create_engine(f"sqlite:///{DB_PATH}")
 
-# Create a session factory
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=engine)
 
 
 def init_database():
     """Initialize the users database."""
-    # Create data folder if it doesn't exist
+
     DATA_FOLDER.mkdir(parents=True, exist_ok=True)
 
-    # Create all tables
     logger.info("Initializing database at", db_path=DB_PATH)
     Base.metadata.create_all(bind=engine, checkfirst=True)
 
@@ -109,6 +118,7 @@ def get_book_comments(book_id: int) -> Sequence[domain_models.Comment]:
                 content=comment.content,
                 start_position=comment.start_position,
                 end_position=comment.end_position,
+                created_at=comment.created_at,
             )
             for comment in comments
         ]
@@ -123,15 +133,17 @@ def get_user_by_username(username: str) -> domain_models.User | None:
         return domain_models.User(id=user.id, username=user.username)
 
 
+class UserAlreadyExists(ValueError):
+    pass
+
+
 def create_user(username: str, password: str) -> None:
     """Create a new user with hashed password. Returns True if successful, False if user already exists."""
     with SessionLocal() as session:
-        # Check if user already exists
         existing_user = session.query(User).filter(User.username == username).first()
         if existing_user:
-            raise ValueError("Username already exists")
+            raise UserAlreadyExists("Username already exists")
 
-        # Hash the password and create new user
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
         new_user = User(username=username, password_hash=password_hash)
@@ -147,7 +159,6 @@ def verify_user(username: str, password: str) -> bool:
         if not user:
             return False
 
-        # Verify password against hash
         return bcrypt.checkpw(
             password.encode("utf-8"), user.password_hash.encode("utf-8")
         )
